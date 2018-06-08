@@ -124,9 +124,29 @@ namespace z.Data
             return Newtonsoft.Json.JsonConvert.SerializeObject(model);
         }
 
+        /// <summary>
+        /// Convert Json to Object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public static T ToObject<T>(this string model)
         {
+            if (string.IsNullOrEmpty(model))
+                return default(T);
+
             return JsonConvert.DeserializeObject<T>(model);
+        }
+
+        /// <summary>
+        /// Convert Json Object to Explicit Type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static T ToObject<T>(this object model)
+        {
+            return model.ToString().ToObject<T>();
         }
 
         /// <summary>

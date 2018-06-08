@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>LJ Gomez</Authors>
     <Company>Exia</Company>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Product>z Data</Product>
     <Description>Some helpers and Extensions Simplified</Description>
     <Copyright>2018</Copyright>
@@ -28,5 +28,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\z.Data.Standard.xml</DocumentationFile>
   </PropertyGroup>
+
+  <Target Name="DebugRedDung" AfterTargets="Pack">
+    <Message Importance="high" Text="Red Dung Cli Started" />
+    <Exec Command="Reddung -w -n" ContinueOnError="true" />
+  </Target>
 
 </Project>
