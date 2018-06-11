@@ -75,12 +75,12 @@ namespace z.Data
 
         public static string ToJson(this jDataModel model)
         {
-            return  JsonConvert.SerializeObject(model);
+            return JsonConvert.SerializeObject(model);
         }
 
         public static string ToJson<T>(this List<T> model)
         {
-            return  JsonConvert.SerializeObject(model);
+            return JsonConvert.SerializeObject(model);
         }
 
         public static Int32 ToInt32(this object obj)
@@ -146,6 +146,8 @@ namespace z.Data
         /// <returns></returns>
         public static T ToObject<T>(this object model)
         {
+            if (model == null)
+                return default(T);
             return model.ToString().ToObject<T>();
         }
 
@@ -368,6 +370,34 @@ namespace z.Data
         }
 
         /// <summary>
+        /// Convert Object to Pair Data Model
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static Pair ToPair<T>(this T obj) where T : class
+        {
+            var p = new Pair();
+            foreach (var j in typeof(T).GetProperties())
+                p.Add(j.Name, GetObjectProperty(obj, j.Name));
+            return p;
+        }
+
+        /// <summary>
+        /// Convert Array to PairCollection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static PairCollection ToPairCollection<T>(this IEnumerable<T> obj) where T : class
+        {
+            var pp = new PairCollection();
+            foreach (var o in obj)
+                pp.Add(ToPair(o));
+            return pp;
+        }
+
+        /// <summary>
         /// LJ 20160105
         /// Set Class property value
         /// </summary>
@@ -389,7 +419,7 @@ namespace z.Data
             Type type = theObject.GetType();
             var prop = type.GetProperty(PropertyName);
             var getter = prop.GetMethod;
-            return getter.Invoke(theObject,  null);
+            return getter.Invoke(theObject, null);
         }
 
         /// <summary>
