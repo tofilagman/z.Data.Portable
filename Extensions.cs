@@ -632,27 +632,9 @@ namespace z.Data
         #endregion
 
         #region  Linq Extension
-
+         
         /// <summary>
-        /// Extension for Linq that doesnt have
-        /// Lj 20151120
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="Linq"></param>
-        /// <param name="action"></param>
-        [Obsolete]
-        public static void ForEach<T>(this IEnumerable<T> Linq, Action<T> action)
-        {
-            Linq.HasRow(x =>
-            {
-                //reverse count, case when deletion occur
-                for (int i = x.Count() - 1; i >= 0; --i)
-                    action(x.ToArray()[i]);
-            });
-        }
-
-        /// <summary>
-        /// Extension for Linq that doesnt have
+        /// Each is a Reverse loop array use Map instead
         /// Lj 20151120
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -667,6 +649,61 @@ namespace z.Data
                     action(x.ToArray()[i]);
             });
         }
+
+        /// <summary>
+        /// loop through items and update through loop and return the updated items
+        /// </summary>
+        /// <typeparam name="TIn"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="Linq"></param>
+        /// <param name="Action"></param>
+        /// <returns></returns>
+        public static IEnumerable<TResult> Map<TIn, TResult>(this IEnumerable<TIn> Linq, Func<TIn, int, TResult> Action)
+        {
+            var i = 0;
+            foreach (var item in Linq)
+            {
+                yield return Action(item, i);
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// loop through items and update through loop without index and return the updated items
+        /// </summary>
+        /// <typeparam name="TIn"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="Linq"></param>
+        /// <param name="Action"></param>
+        /// <returns></returns>
+        public static IEnumerable<TResult> Map<TIn, TResult>(this IEnumerable<TIn> Linq, Func<TIn, TResult> Action)
+        {
+            return Map(Linq, (x, i) => Action(x));
+        }
+
+        /// <summary>
+        /// loop through items and update through loop
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Linq"></param>
+        /// <param name="Action"></param>
+        public static void Map<T>(this IEnumerable<T> Linq, Action<T, int> Action)
+        {
+            var i = 0;
+            foreach (var item in Linq)
+            {
+                Action(item, i);
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// loop through items and update through loop without index
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Linq"></param>
+        /// <param name="Action"></param>
+        public static void Map<T>(this IEnumerable<T> Linq, Action<T> Action) => Map(Linq, (x, i) => Action(x));
 
         public static void HasRow<T>(this IEnumerable<T> linq, Action<IEnumerable<T>> action)
         {
