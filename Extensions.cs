@@ -440,6 +440,18 @@ namespace z.Data
             }
         }
 
+        /// <summary>
+        /// Check the object property if exists by name
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="Name"></param>
+        /// <returns></returns>
+        public static bool ContainsKey<T>(this T obj, string Name) where T : class
+        {
+            return obj.GetType().GetProperties().Any(x => x.Name == Name);
+        }
+
         public static void ModelToTable<T>(this DataTable dt, T ctx) where T : class
         {
             DataRow dr = dt.NewRow();
