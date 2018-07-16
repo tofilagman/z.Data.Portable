@@ -73,14 +73,14 @@ namespace z.Data
             using (PairCollection pc = new PairCollection(dt)) return pc.Serialize();
         }
 
-        public static string ToJson(this jDataModel model)
+        public static string ToJson(this jDataModel model, bool format = false)
         {
-            return JsonConvert.SerializeObject(model);
+            return JsonConvert.SerializeObject(model, format ? Formatting.Indented : Formatting.None);
         }
 
-        public static string ToJson<T>(this List<T> model)
+        public static string ToJson<T>(this List<T> model, bool format = false)
         {
-            return JsonConvert.SerializeObject(model);
+            return JsonConvert.SerializeObject(model, format ? Formatting.Indented : Formatting.None);
         }
 
         public static Int32 ToInt32(this object obj)
@@ -114,14 +114,14 @@ namespace z.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
         /// <returns></returns>
-        public static string ToJson<T>(this T model)
+        public static string ToJson<T>(this T model, bool format = false)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(model);
+            return  JsonConvert.SerializeObject(model, format ? Formatting.Indented : Formatting.None);
         }
 
-        public static string ToJson(this jDataRow model)
+        public static string ToJson(this jDataRow model, bool format = false)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(model);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(model, format ? Formatting.Indented : Formatting.None);
         }
 
         /// <summary>
@@ -644,7 +644,7 @@ namespace z.Data
         #endregion
 
         #region  Linq Extension
-         
+
         /// <summary>
         /// Each is a Reverse loop array use Map instead
         /// Lj 20151120
