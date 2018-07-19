@@ -104,7 +104,7 @@ namespace z.Data
             this.Each(x => h.Add(x.Key, x.Value));
             return h;
         }
-
+         
         public static Pair New(string Key, object Value)
         {
             return new Pair().Add(Key, Value);

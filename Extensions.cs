@@ -11,7 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using z.Data.JsonClient;
+using z.Data.JsonClient; 
 
 namespace z.Data
 {
@@ -641,6 +641,21 @@ namespace z.Data
             UpdateTo(fromObject, toObject, Condition);
         }
 
+        /// <summary>
+        /// This will get all posible Properties in a class, even it has a object member
+        /// </summary>
+        public static ObjectKeyCollection GetKeys(this Type obj)
+        {
+            return new ObjectKeys(obj).Keys;
+        }
+
+        /// <summary>
+        /// This will get all posible Properties in a class, even it has a object member
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static ObjectKeyCollection GetKeys<T>() where T : class => typeof(T).GetKeys();
+          
         #endregion
 
         #region  Linq Extension
