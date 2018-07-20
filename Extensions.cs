@@ -11,7 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using z.Data.JsonClient; 
+using z.Data.JsonClient;
 
 namespace z.Data
 {
@@ -116,7 +116,7 @@ namespace z.Data
         /// <returns></returns>
         public static string ToJson<T>(this T model, bool format = false)
         {
-            return  JsonConvert.SerializeObject(model, format ? Formatting.Indented : Formatting.None);
+            return JsonConvert.SerializeObject(model, format ? Formatting.Indented : Formatting.None);
         }
 
         public static string ToJson(this jDataRow model, bool format = false)
@@ -589,18 +589,26 @@ namespace z.Data
         /// <param name="fromObject"></param>
         /// <param name="toObject"></param>
         /// <param name="Condition"></param>
-        public static void UpdateTo<TFrom, TTO>(this TFrom fromObject, TTO toObject, IDataExpression<TFrom> Condition = null)
+        public static void UpdateTo<TFrom, TTO>(this TFrom fromObject, TTO toObject, Action<IDataExpression<TFrom>> Condition = null) where TFrom : class
         {
+            var dx = new DataExpression<TFrom>();
+            Condition?.Invoke(dx);
+
             var h = typeof(TTO).GetProperties();
             foreach (var j in typeof(TFrom).GetProperties())
             {
-                var cn = Condition?.Result(j.Name);
-
-                if (h.Any(x => x.Name == j.Name) && (cn == null || cn == true))
+                if (h.Any(x => x.Name == j.Name)) // && (cn == null || cn == true)
                 {
-                    var val = GetObjectProperty(fromObject, j.Name);
-
-                    SetObjectProperty<TTO>(toObject, j.Name, val);
+                    if (Condition == null)
+                    {
+                        var val = GetObjectProperty(fromObject, j.Name);
+                        SetObjectProperty(toObject, j.Name, val);
+                    }
+                    else if ((dx.ExpType == DataExpressionType.Include && dx.Result(j.Name)) || (dx.ExpType == DataExpressionType.Exclude && !dx.Result(j.Name)))
+                    {
+                        var val = GetObjectProperty(fromObject, j.Name);
+                        SetObjectProperty(toObject, j.Name, val);
+                    }
                 }
             }
         }
@@ -636,7 +644,7 @@ namespace z.Data
         /// <param name="fromObject"></param>
         /// <param name="toObject"></param>
         /// <param name="Condition"></param>
-        public static void Update<T>(this T fromObject, T toObject, IDataExpression<T> Condition = null)
+        public static void Update<T>(this T fromObject, T toObject, Action<IDataExpression<T>> Condition = null) where T : class
         {
             UpdateTo(fromObject, toObject, Condition);
         }
@@ -655,7 +663,7 @@ namespace z.Data
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static ObjectKeyCollection GetKeys<T>() where T : class => typeof(T).GetKeys();
-          
+
         #endregion
 
         #region  Linq Extension
