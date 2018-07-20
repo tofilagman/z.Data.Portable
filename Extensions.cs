@@ -589,12 +589,12 @@ namespace z.Data
         /// <param name="fromObject"></param>
         /// <param name="toObject"></param>
         /// <param name="Condition"></param>
-        public static void UpdateTo<TFrom, TTO>(this TFrom fromObject, TTO toObject, Func<TFrom, PropertyInfo, bool> Condition = null)
+        public static void UpdateTo<TFrom, TTO>(this TFrom fromObject, TTO toObject, IDataExpression<TFrom> Condition = null)
         {
             var h = typeof(TTO).GetProperties();
             foreach (var j in typeof(TFrom).GetProperties())
             {
-                var cn = Condition?.Invoke(fromObject, j);
+                var cn = Condition?.Result(j.Name);
 
                 if (h.Any(x => x.Name == j.Name) && (cn == null || cn == true))
                 {
@@ -636,7 +636,7 @@ namespace z.Data
         /// <param name="fromObject"></param>
         /// <param name="toObject"></param>
         /// <param name="Condition"></param>
-        public static void Update<T>(this T fromObject, T toObject, Func<T, PropertyInfo, bool> Condition = null)
+        public static void Update<T>(this T fromObject, T toObject, IDataExpression<T> Condition = null)
         {
             UpdateTo(fromObject, toObject, Condition);
         }
