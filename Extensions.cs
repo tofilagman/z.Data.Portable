@@ -613,6 +613,28 @@ namespace z.Data
             }
         }
 
+        /// <summary>
+        /// Update to other type of object
+        /// </summary>
+        /// <typeparam name="TFrom"></typeparam>
+        /// <typeparam name="TTO"></typeparam>
+        /// <param name="fromObject"></param>
+        /// <param name="toObject"></param>
+        /// <param name="Condition"></param>
+        public static void UpdateTo<TFrom, TTO>(this TFrom fromObject, TTO toObject, Func<PropertyInfo, bool> Condition = null) where TFrom : class
+        {
+            var h = typeof(TTO).GetProperties();
+            foreach (var j in typeof(TFrom).GetProperties())
+            {
+                var cn = Condition?.Invoke(j);
+                if (h.Any(x => x.Name == j.Name && (cn == null || cn == true)))
+                {
+                    var val = GetObjectProperty(fromObject, j.Name);
+                    SetObjectProperty(toObject, j.Name, val);
+                }
+            }
+        }
+
         public static T CreateIfNull<T>(this T obj) where T : class
         {
             if (obj == null)
@@ -644,11 +666,17 @@ namespace z.Data
         /// <param name="fromObject"></param>
         /// <param name="toObject"></param>
         /// <param name="Condition"></param>
-        public static void Update<T>(this T fromObject, T toObject, Action<IDataExpression<T>> Condition = null) where T : class
-        {
-            UpdateTo(fromObject, toObject, Condition);
-        }
+        public static void Update<T>(this T fromObject, T toObject, Action<IDataExpression<T>> Condition = null) where T : class => UpdateTo(fromObject, toObject, Condition);
 
+        /// <summary>
+        /// Update a single type of object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="fromObject"></param>
+        /// <param name="toObject"></param>
+        /// <param name="Condition"></param>
+        public static void Update<T>(this T fromObject, T toObject, Func<PropertyInfo, bool> Condition = null) where T : class => UpdateTo(fromObject, toObject, Condition);
+         
         /// <summary>
         /// This will get all posible Properties in a class, even it has a object member
         /// </summary>
