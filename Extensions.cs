@@ -589,7 +589,7 @@ namespace z.Data
         /// <param name="fromObject"></param>
         /// <param name="toObject"></param>
         /// <param name="Condition"></param>
-        public static void UpdateTo<TFrom, TTO>(this TFrom fromObject, TTO toObject, Action<IDataExpression<TFrom>> Condition = null) where TFrom : class
+        public static void UpdateTo<TFrom, TTO>(this TFrom fromObject, TTO toObject, Action<IDataExpression<TFrom>> Condition) where TFrom : class
         {
             var dx = new DataExpression<TFrom>();
             Condition?.Invoke(dx);
@@ -621,7 +621,7 @@ namespace z.Data
         /// <param name="fromObject"></param>
         /// <param name="toObject"></param>
         /// <param name="Condition"></param>
-        public static void UpdateTo<TFrom, TTO>(this TFrom fromObject, TTO toObject, Func<PropertyInfo, bool> Condition = null) where TFrom : class
+        public static void UpdateTo<TFrom, TTO>(this TFrom fromObject, TTO toObject, Func<PropertyInfo, bool> Condition) where TFrom : class
         {
             var h = typeof(TTO).GetProperties();
             foreach (var j in typeof(TFrom).GetProperties())
@@ -634,6 +634,8 @@ namespace z.Data
                 }
             }
         }
+
+        public static void UpdateTo<TFrom, TTO>(this TFrom fromObject, TTO toObject) where TFrom : class => UpdateTo(fromObject, toObject, null);
 
         public static T CreateIfNull<T>(this T obj) where T : class
         {
@@ -666,7 +668,7 @@ namespace z.Data
         /// <param name="fromObject"></param>
         /// <param name="toObject"></param>
         /// <param name="Condition"></param>
-        public static void Update<T>(this T fromObject, T toObject, Action<IDataExpression<T>> Condition = null) where T : class => UpdateTo(fromObject, toObject, Condition);
+        public static void Update<T>(this T fromObject, T toObject, Action<IDataExpression<T>> Condition) where T : class => UpdateTo(fromObject, toObject, Condition);
 
         /// <summary>
         /// Update a single type of object
@@ -675,8 +677,10 @@ namespace z.Data
         /// <param name="fromObject"></param>
         /// <param name="toObject"></param>
         /// <param name="Condition"></param>
-        public static void Update<T>(this T fromObject, T toObject, Func<PropertyInfo, bool> Condition = null) where T : class => UpdateTo(fromObject, toObject, Condition);
-         
+        public static void Update<T>(this T fromObject, T toObject, Func<PropertyInfo, bool> Condition) where T : class => UpdateTo(fromObject, toObject, Condition);
+
+        public static void Update<T>(this T fromObject, T toObject) where T : class => UpdateTo(fromObject, toObject);
+
         /// <summary>
         /// This will get all posible Properties in a class, even it has a object member
         /// </summary>
