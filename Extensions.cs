@@ -1082,14 +1082,13 @@ namespace z.Data
         /// <param name="toObject"></param>
         /// <param name="ColumnFrom"></param>
         /// <param name="ColumnTo"></param>
-        public static void MapReference<TFrom, TTo, TFromResult, TToResult>(this TFrom fromObject, IEnumerable<TTo> toObject, Action<TTo, TFrom> Result, Func<TTo, bool> filter = null)
+        public static void MapReference<TFrom, TTo>(this TFrom fromObject, IEnumerable<TTo> toObject, Action<TTo, TFrom> Result, Func<TTo, bool> filter = null)
         {
             if (fromObject == null) throw new ArgumentNullException("fromObject");
             if (toObject == null) throw new ArgumentNullException("toObject");
 
             foreach (var tod in toObject.Where(filter.DefaultFilter()))
                 Result(tod, fromObject);
-
         }
 
         /// <summary>
@@ -1104,7 +1103,7 @@ namespace z.Data
         public static void MapReference<TFrom, TTo>(
             this IEnumerable<TFrom> fromObject,
             IEnumerable<TTo> toObject,
-            Func<TFrom, TTo, bool> Compare,
+            Func<TTo, TFrom, bool> Compare,
             Action<TTo, TFrom> Result)
         {
             if (fromObject == null) throw new ArgumentNullException("fromObject");
@@ -1113,7 +1112,7 @@ namespace z.Data
 
             foreach (var frm in fromObject)
                 foreach (var tod in toObject)
-                    if (Compare(frm, tod))
+                    if (Compare(tod, frm))
                         Result(tod, frm);
         }
     }

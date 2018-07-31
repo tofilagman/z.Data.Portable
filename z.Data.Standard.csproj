@@ -5,12 +5,12 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>LJ Gomez</Authors>
     <Company>Exia</Company>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <Product>z Data</Product>
     <Description>Some helpers and Extensions Simplified</Description>
     <Copyright>2018</Copyright>
     <PackageIconUrl>https://www.gravatar.com/avatar/fc532ccf021d86fcafbb8db5a42d46d9</PackageIconUrl>
-    <PackageReleaseNotes>Object Key Searcher</PackageReleaseNotes>
+    <PackageReleaseNotes>Map References</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
