@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -1051,5 +1052,69 @@ namespace z.Data
 
         public static string SqlToJs(this string sql) => Converters.SqlToJs.Convert(sql);
 
+        public static string GetName<T>(this Expression<T> expression)
+        {
+            return (expression.Body as MemberExpression ?? ((UnaryExpression)expression.Body).Operand as MemberExpression).Member.Name;
+        }
+
+        /// <summary>
+        /// Returns true if the expression is null
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static Func<T, bool> DefaultFilter<T>(this Func<T, bool> filter)
+        {
+            if (filter == null)
+                return x => true;
+            else
+                return filter;
+        }
+
+        /// <summary>
+        /// Update an array property from an object
+        /// </summary>
+        /// <typeparam name="TFrom"></typeparam>
+        /// <typeparam name="TTo"></typeparam>
+        /// <typeparam name="TFromResult"></typeparam>
+        /// <typeparam name="TToResult"></typeparam>
+        /// <param name="fromObject"></param>
+        /// <param name="toObject"></param>
+        /// <param name="ColumnFrom"></param>
+        /// <param name="ColumnTo"></param>
+        public static void MapReference<TFrom, TTo, TFromResult, TToResult>(this TFrom fromObject, IEnumerable<TTo> toObject, Action<TTo, TFrom> Result, Func<TTo, bool> filter = null)
+        {
+            if (fromObject == null) throw new ArgumentNullException("fromObject");
+            if (toObject == null) throw new ArgumentNullException("toObject");
+
+            foreach (var tod in toObject.Where(filter.DefaultFilter()))
+                Result(tod, fromObject);
+
+        }
+
+        /// <summary>
+        /// Update the target array with specified filter
+        /// </summary>
+        /// <typeparam name="TFrom"></typeparam>
+        /// <typeparam name="TTo"></typeparam>
+        /// <param name="fromObject"></param>
+        /// <param name="toObject"></param>
+        /// <param name="Compare"></param>
+        /// <param name="Result"></param>
+        public static void MapReference<TFrom, TTo>(
+            this IEnumerable<TFrom> fromObject,
+            IEnumerable<TTo> toObject,
+            Func<TFrom, TTo, bool> Compare,
+            Action<TTo, TFrom> Result)
+        {
+            if (fromObject == null) throw new ArgumentNullException("fromObject");
+            if (toObject == null) throw new ArgumentNullException("toObject");
+            if (Result == null) throw new ArgumentNullException("Result");
+
+            foreach (var frm in fromObject)
+                foreach (var tod in toObject)
+                    if (Compare(frm, tod))
+                        Result(tod, frm);
+        }
     }
 }
