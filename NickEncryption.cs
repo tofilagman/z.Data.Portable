@@ -54,7 +54,7 @@ namespace z.Data.Standard
         public void turn(int Step)
         {
             Step = Step + turns;
- 
+
             int Counter = (Step == 0 || Step == Length) ? 1 : (Step > Length) ? (Step - Length) + 1 : (Length - Step) + 1;
 
             while (Counter > Length)
@@ -97,6 +97,15 @@ namespace z.Data.Standard
             mRotor = new Rotor();
             sRotor = new Rotor();
         }
+
+
+        public void Sha256()
+        {
+            byte[] data = KeyGen.ASCIIEncoder("LJ Gomez");
+            var gg = SHA256.MessageSHA256(data);
+
+            var k = Convert.ToBase64String(gg);
+;        }
 
         public string Encrypt(string Data, string Key)
         {
@@ -233,6 +242,7 @@ namespace z.Data.Standard
                 }
                 byte[] key = new byte[keySize];
                 Array.Copy(data, 0, key, 0, keySize);
+
                 return key;
             }
 
