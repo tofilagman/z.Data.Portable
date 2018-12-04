@@ -4,7 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace z.Data.Standard.Test
+namespace z.Data
 {
     public static class CryptoJS
     {
@@ -15,6 +15,14 @@ namespace z.Data.Standard.Test
             var iv = Encoding.UTF8.GetBytes(Salt);
 
             return Convert.ToBase64String(CryptoJS.EncryptStringToBytes(compData, keybytes, iv));
+
+            //Data.CompressUriEncoded();
+
+            //var keybytes = Encoding.UTF8.GetBytes(Password);
+            //var iv = Encoding.UTF8.GetBytes(Salt);
+            //var compData = Convert.ToBase64String(CryptoJS.EncryptStringToBytes(Data, keybytes, iv));
+
+            //return compData; //.CompressUriEncoded();
         }
 
         public static string Decrypt(string Data, string Password, string Salt)
@@ -25,6 +33,13 @@ namespace z.Data.Standard.Test
             var decrypt = CryptoJS.DecryptStringFromBytes(Convert.FromBase64String(Data), keybytes, iv);
 
             return decrypt.CompressFromUriEncoded();
+            //var keybytes = Encoding.UTF8.GetBytes(Password);
+            //var iv = Encoding.UTF8.GetBytes(Salt);
+
+            ////var compdata = Data //.CompressFromUriEncoded(); //CryptoJS.DecryptStringFromBytes(Convert.FromBase64String(Data), keybytes, iv);
+            //var decrypt = CryptoJS.DecryptStringFromBytes(Convert.FromBase64String(Data), keybytes, iv);
+
+            //return decrypt; //.CompressFromBase64() ;
         }
 
 

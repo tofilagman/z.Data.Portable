@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using z.Data.JsonClient;
+using z.Data.Models;
 
 namespace z.Data
 {
@@ -959,6 +960,50 @@ namespace z.Data
             }
             foreach (var w in d.OrderByDescending(x => x.Item3).ThenBy(x => x.Item2))
                 yield return w.Item1;
+        }
+
+        public static IEnumerable<GroupResult<TElement>> GroupByMany<TElement>(this IEnumerable<TElement> elements, params GroupItem<TElement>[] groupSelectors)
+        {
+            if (groupSelectors.Length > 0)
+            {
+
+                var selector = groupSelectors.First();
+ 
+                var nextSelectors = groupSelectors.Skip(1).ToArray();
+
+                return elements.GroupBy(selector.Query).Select(
+                        g => new GroupResult<TElement>
+                        {
+                            Name = selector.Name,
+                            Key = g.Key,
+                            Count = g.Count(),
+                            Items = g,
+                            SubGroups = g.GroupByMany(nextSelectors)
+                        });
+            }
+            else
+                return null;
+        }
+
+        public static IEnumerable<GroupResult<TElement>> GroupByMany<TElement>(this IEnumerable<TElement> elements, params Func<TElement, object>[] groupSelectors)
+        {
+            if (groupSelectors.Length > 0)
+            {
+                var selector = groupSelectors.First();
+                 
+                var nextSelectors = groupSelectors.Skip(1).ToArray();
+
+                return elements.GroupBy(selector).Select(
+                        g => new GroupResult<TElement>
+                        {
+                            Key = g.Key,
+                            Count = g.Count(),
+                            Items = g,
+                            SubGroups = g.GroupByMany(nextSelectors)
+                        });
+            }
+            else
+                return null; 
         }
 
         #endregion
