@@ -13,9 +13,9 @@ namespace z.Data
     /// LJ 20150807
     /// </summary>
     [Serializable]
-    public class Pair : Dictionary<string, object>, IDisposable  
+    public class Pair : Dictionary<string, object>, IDisposable
     {
-        
+
         public Pair()
             : base()
         { }
@@ -51,11 +51,27 @@ namespace z.Data
             set { base[key] = value; }
         }
 
-        public object this[string key, object DefaultValue]
+        public object this[int index]
         {
             get
             {
-                return Get(key, DefaultValue);
+                return this.Get(index);
+            }
+        }
+
+        public object this[int index, object defaultValue]
+        {
+            get
+            {
+                return this.Get(index, defaultValue);
+            }
+        }
+
+        public object this[string key, object defaultValue]
+        {
+            get
+            {
+                return Get(key, defaultValue);
             }
             set
             {
@@ -84,7 +100,7 @@ namespace z.Data
                 base.Add(key(g), value(g));
             }
         }
-         
+
         public string Serialize()
         {
             return this.ToJson();
@@ -104,10 +120,16 @@ namespace z.Data
             this.Each(x => h.Add(x.Key, x.Value));
             return h;
         }
-         
+
         public static Pair New(string Key, object Value)
         {
             return new Pair().Add(Key, Value);
+        }
+
+        public object Get(int index, object DefaultValue = null)
+        {
+            var g = this.Keys.ElementAt(index);
+            return Get(g, DefaultValue);
         }
 
         //IEnumerator IEnumerable.GetEnumerator() => dc.GetEnumerator();
