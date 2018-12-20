@@ -67,7 +67,7 @@ namespace z.Data
 
         public static string PairModel(this DataRow dr)
         {
-            using (Pair p = new Pair(dr)) return p.Serialize();
+            using (Pair p = new Pair(dr)) return p.ToString();
         }
 
         public static string PairModel(this DataTable dt)

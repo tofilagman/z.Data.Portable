@@ -13,9 +13,8 @@ namespace z.Data
     /// LJ 20150807
     /// </summary>
     [Serializable]
-    public class Pair : Dictionary<string, object>, IDisposable
+    public class Pair : Dictionary<string, object>, IPair
     {
-
         public Pair()
             : base()
         { }
@@ -87,7 +86,7 @@ namespace z.Data
                 return DefaultValue;
         }
 
-        public new Pair Add(string Key, object Value)
+        public new IPair Add(string Key, object Value)
         {
             base.Add(Key, Value);
             return this;
@@ -101,7 +100,7 @@ namespace z.Data
             }
         }
 
-        public string Serialize()
+        public new string ToString()
         {
             return this.ToJson();
         }
@@ -114,37 +113,28 @@ namespace z.Data
             GC.Collect();
         }
 
-        public Pair IgnoreCase()
+        public IPair IgnoreCase()
         {
             var h = new Pair(StringComparer.OrdinalIgnoreCase);
             this.Each(x => h.Add(x.Key, x.Value));
             return h;
         }
 
-        public static Pair New(string Key, object Value)
+        public static IPair New(string Key, object Value)
         {
             return new Pair().Add(Key, Value);
         }
 
-        public object Get(int index, object DefaultValue = null)
+        protected object Get(int index, object DefaultValue = null)
         {
             var g = this.Keys.ElementAt(index);
             return Get(g, DefaultValue);
         }
 
-        //IEnumerator IEnumerable.GetEnumerator() => dc.GetEnumerator();
-
-        //IEnumerator<KeyValuePair<string, object>> IEnumerable<KeyValuePair<string, object>>.GetEnumerator() => dc.GetEnumerator();
-
-        //public void OnDeserialization(object sender) => dc.OnDeserialization(sender);
-
-
-        //public void GetObjectData(SerializationInfo info, StreamingContext context) => dc.GetObjectData(info, context);
-
     }
 
     [Serializable]
-    public class PairCollection : List<Pair>, IList<Pair>, IDisposable
+    public class PairCollection : List<IPair>, IList<IPair>, IDisposable
     {
         public PairCollection() : base() { }
 
