@@ -18,7 +18,7 @@ namespace z.Data
         public Pair()
             : base()
         { }
-
+        
         public Pair(string key, object value)
         {
             this.Add(key, value);
@@ -98,6 +98,15 @@ namespace z.Data
             {
                 base.Add(key(g), value(g));
             }
+        }
+
+        public IPair AddOrUpdate(string Key , object Value)
+        {
+            if (base.ContainsKey(Key))
+                base[Key] = Value;
+            else
+                Add(Key, Value); 
+            return this;
         }
 
         public new string ToString()

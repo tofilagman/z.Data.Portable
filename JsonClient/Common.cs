@@ -10,20 +10,20 @@ namespace z.Data.JsonClient
     public static class Common
     {
 
-        public static DataSet ToDataSet(string data)
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<DataSet>(data);
-        }
+        //public static DataSet ToDataSet(string data)
+        //{
+        //    return Newtonsoft.Json.JsonConvert.DeserializeObject<DataSet>(data);
+        //}
 
         public static DataTable ToDataTable(string data)
         {
             return Newtonsoft.Json.JsonConvert.DeserializeObject<DataTable>(data);
         }
 
-        public static string ToString(DataSet data)
-        {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(data);
-        }
+        //public static string ToString(DataSet data)
+        //{
+        //    return Newtonsoft.Json.JsonConvert.SerializeObject(data);
+        //}
 
         public static string ToString(DataTable data)
         {
