@@ -1090,6 +1090,11 @@ namespace z.Data
             return (inp == null) ? AlterVal : ((inp == DBNull.Value) ? AlterVal : inp);
         }
 
+        public static T IsNull2<T>(this T inp, T AlterVal)
+        {
+            return (inp == null) ? AlterVal : (inp.Equals(DBNull.Value) ? AlterVal : inp);
+        }
+
         public static bool IsNull<T>(this T obj)
         {
             return obj == null;
