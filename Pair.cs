@@ -44,6 +44,10 @@ namespace z.Data
             }
         }
 
+        public Pair(IDictionary<string, object> data): base(data) { }
+
+        public Pair(IDictionary<string, object> data, IEqualityComparer<string> comparer): base(data, comparer) { }
+
         public new object this[string key]
         {
             get { return Get(key); }

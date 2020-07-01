@@ -5,19 +5,19 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>LJ Gomez</Authors>
     <Company>Exia</Company>
-    <Version>1.2.13</Version>
+    <Version>1.2.14</Version>
     <Product>z Data</Product>
     <Description>Some helpers and Extensions Simplified</Description>
     <Copyright>2018</Copyright>
     <PackageIconUrl>https://www.gravatar.com/avatar/fc532ccf021d86fcafbb8db5a42d46d9</PackageIconUrl>
     <PackageReleaseNotes>IsNull2</PackageReleaseNotes>
     <RootNamespace>z.Data</RootNamespace>
-    <AssemblyVersion>1.2.13.0</AssemblyVersion>
-    <FileVersion>1.2.13.0</FileVersion>
+    <AssemblyVersion>1.2.14.0</AssemblyVersion>
+    <FileVersion>1.2.14.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" /> 
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" /> 
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
@@ -25,12 +25,6 @@
       <Version>4.4.0</Version>
     </PackageReference>
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' OR '$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Data.SqlClient">
-      <Version>4.4.0</Version>
-    </PackageReference>
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' OR '$(TargetFramework)' == 'netstandard2.0'">
@@ -44,10 +38,5 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\z.Data.Standard.xml</DocumentationFile>
   </PropertyGroup>
-
-  <Target Name="DebugRedDung" AfterTargets="Pack">
-    <Message Importance="high" Text="Red Dung Cli Started" />
-    <Exec Command="Reddung -w -n" ContinueOnError="true" />
-  </Target>
-
+ 
 </Project>
