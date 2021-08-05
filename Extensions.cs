@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using z.Data.JsonClient;
 using z.Data.Models;
 
@@ -968,7 +969,7 @@ namespace z.Data
             {
 
                 var selector = groupSelectors.First();
- 
+
                 var nextSelectors = groupSelectors.Skip(1).ToArray();
 
                 return elements.GroupBy(selector.Query).Select(
@@ -990,7 +991,7 @@ namespace z.Data
             if (groupSelectors.Length > 0)
             {
                 var selector = groupSelectors.First();
-                 
+
                 var nextSelectors = groupSelectors.Skip(1).ToArray();
 
                 return elements.GroupBy(selector).Select(
@@ -1003,7 +1004,7 @@ namespace z.Data
                         });
             }
             else
-                return null; 
+                return null;
         }
 
         #endregion
@@ -1165,5 +1166,54 @@ namespace z.Data
                     if (Compare(tod, frm))
                         Result(tod, frm);
         }
+
+        public static string HumanizeColumn(this string column, string removeStartsWith = "ID_")
+        {
+            if (string.IsNullOrEmpty(column))
+                return column;
+
+            var col = column;
+            if (col.StartsWith(removeStartsWith))
+                col = col.Substring(removeStartsWith.Length);
+
+            var reg = new Regex(@"(?<=.{1})([A-Z])", RegexOptions.Multiline);
+
+            return reg.Replace(col, " $1");
+        }
+
+        public static T CopyTo<R, T>(this R source, T data)
+        {
+            var h = data;
+            var df = source.GetType().GetProperties();
+            var hd = typeof(T).GetProperties();
+            foreach (var d in df)
+            {
+                var ss = hd.SingleOrDefault(x => x.Name == d.Name);
+                if (ss != null)
+                {
+                    h.SetObjectProperty(d.Name, source.GetObjectProperty(d.Name));
+                }
+            }
+            return h;
+        }
+
+        public static async Task<T> CopyToAsync<R, T>(this R data, T func)
+        {
+            return await Task.FromResult(data.CopyTo(func));
+        }
+         
+        public static TValue GetAttributeValue<TAttribute, TValue>(this Type type, Func<TAttribute, TValue> valueSelector) where TAttribute : Attribute
+        {
+            if (type.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() is TAttribute att)
+            {
+                return valueSelector(att);
+            }
+
+            throw new InvalidOperationException($"Attribute {nameof(TAttribute)} is not defined in object: { nameof(type) }");
+        }
+
+        public static long ToInt64(this string data) => long.Parse(data);
+
+        public static long ToInt64(this object data) => ToInt64(data.ToString());
     }
 }
