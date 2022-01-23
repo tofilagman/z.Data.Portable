@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>LJ Gomez</Authors>
     <Company>Exia</Company>
-    <Version>1.2.16</Version>
+    <Version>1.2.17</Version>
     <Product>z Data</Product>
     <Description>Some helpers and Extensions Simplified</Description>
     <Copyright>2018</Copyright>

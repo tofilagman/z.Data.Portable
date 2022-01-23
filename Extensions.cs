@@ -426,6 +426,20 @@ namespace z.Data
         }
 
         /// <summary>
+        /// To check for Nullable use: Nullable.GetUnderlyingType(propertyType) != null
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="theObject"></param>
+        /// <param name="PropertyName"></param>
+        /// <returns></returns>
+        public static Type GetObjectPropertyType<T>(this T theObject, string PropertyName)
+        {
+            Type type = theObject.GetType();
+            var prop = type.GetProperty(PropertyName);
+            return prop.PropertyType;
+        }
+
+        /// <summary>
         /// LJ 20160301
         /// Object Modeling for DataTable
         /// </summary>
@@ -1007,6 +1021,8 @@ namespace z.Data
                 return null;
         }
 
+        public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> self) => self?.Select((item, index) => (item, index)) ?? new List<(T, int)>();
+ 
         #endregion
 
         #region Compression
@@ -1215,5 +1231,7 @@ namespace z.Data
         public static long ToInt64(this string data) => long.Parse(data);
 
         public static long ToInt64(this object data) => ToInt64(data.ToString());
+
+        
     }
 }
