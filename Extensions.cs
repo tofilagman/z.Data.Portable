@@ -1022,7 +1022,19 @@ namespace z.Data
         }
 
         public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> self) => self?.Select((item, index) => (item, index)) ?? new List<(T, int)>();
- 
+
+        public static IEnumerable<(TKey Key, TElement Value)> SelectManyWithKey<TSource, TKey, TElement>(this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector, Func<TSource, IEnumerable<TElement>> elementSelector)
+        {
+            foreach (var nkey in source.ToDictionary(keySelector, elementSelector))
+            {
+                foreach (var nvalue in nkey.Value)
+                {
+                    yield return (nkey.Key, nvalue);
+                }
+            }
+        }
+         
         #endregion
 
         #region Compression
