@@ -1244,6 +1244,24 @@ namespace z.Data
 
         public static long ToInt64(this object data) => ToInt64(data.ToString());
 
-        
+        /// <summary>
+        /// Convert an IEnumerable to Pair object by specifying key and value
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="keySelector"></param>
+        /// <param name="valueSelector"></param>
+        /// <returns></returns>
+        public static IPair<TKey, TValue> ToPair<TSource, TKey, TValue>(this IEnumerable<TSource> data,
+                  Func<TSource, TKey> keySelector, Func<TSource, TValue> valueSelector)
+        {
+            var px = new Pair<TKey, TValue>();
+            foreach (var q in data)
+                px.Add(keySelector(q), valueSelector(q));
+            return px;
+        }
+
     }
 }
